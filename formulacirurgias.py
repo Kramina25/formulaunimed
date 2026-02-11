@@ -256,8 +256,10 @@ with pd.ExcelWriter(SAIDA, engine="openpyxl") as writer:
             ws_tot[f"C{i}"] = ""
 
         # D: Diferença = C - B
-        ws_tot[f"D{i}"] = f"=C{i}-B{i}"
+        ws_tot[f"D{i}"] = f"=IFERROR(N(C{i})-N(B{i}),0)"
         ws_tot[f"D{i}"].number_format = 'R$ #,##0.00'
+
+
 
     # Linha total geral (só na coluna B faz sentido, mas você pode somar D também se quiser)
     last_tot_row = 1 + len(CIRURGIOES) + 1
