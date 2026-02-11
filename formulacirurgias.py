@@ -1,4 +1,5 @@
 import os
+import sys
 import pandas as pd
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
@@ -7,8 +8,16 @@ from openpyxl.styles import Font
 # =========================
 # CONFIG
 # =========================
-PASTA = os.path.dirname(os.path.abspath(__file__))
+def get_base_dir() -> str:
+    # Quando vira .exe (PyInstaller), sys.executable é o caminho do executável
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(sys.executable)
+    # Quando roda como .py normal
+    return os.path.dirname(os.path.abspath(__file__))
+
+PASTA = get_base_dir()
 SAIDA = os.path.join(PASTA, "Resumo_Cirurgias.xlsx")
+
 
 PREFIXOS = {
     "65641": "MCN",
@@ -56,6 +65,19 @@ arquivos = [
     and not f.startswith("~$")
     and f != os.path.basename(SAIDA)
 ]
+
+# DEBUG (para ver onde o exe está procurando)
+print(f"📁 Pasta usada: {PASTA}")
+print(f"📄 Arquivos .xlsx encontrados: {len(arquivos)}")
+for f in arquivos:
+    print(" -", f)
+
+
+# DEBUG (para ver onde o exe está procurando)
+print(f"📁 Pasta usada: {PASTA}")
+print(f"📄 Arquivos .xlsx encontrados: {len(arquivos)}")
+for f in arquivos:
+    print(" -", f)
 
 resumo_total = []
 
